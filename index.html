@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #000;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #message {
+      display: none;
+      text-align: center;
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 60px;
+      height: 80px;
+      background-color: red;
+      border-radius: 50% 50% 50% 50%;
+      animation: floatUp 5s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { bottom: -100px; opacity: 1; }
+      100% { bottom: 110%; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="code" placeholder="Tape ton code ici..." />
+  <button onclick="checkCode()">Valider</button>
+
+  <div id="message">🎈 rby ynj7k aziz 5ouk 🎈</div>
+
+  <script>
+    function checkCode() {
+      const input = document.getElementById("code").value;
+      if (input.toLowerCase() === "9rb") {
+        document.getElementById("message").style.display = "block";
+        spawnBalloons();
+      } else {
+        alert("Code incorrect !");
+      }
+    }
+
+    function spawnBalloons() {
+      for (let i = 0; i < 30; i++) {
+        const balloon = document.createElement("div");
+        balloon.className = "balloon";
+        balloon.style.left = Math.random() * 100 + "vw";
+        balloon.style.backgroundColor = ["red", "blue", "yellow"][i % 3];
+        document.body.appendChild(balloon);
+      }
+    }
+  </script>
+</body>
+</html>
