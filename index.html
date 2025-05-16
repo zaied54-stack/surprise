@@ -2,69 +2,215 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Surprise</title>
+  <!-- Affichage adapté aux mobiles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surprise ! 🎉</title>
   <style>
+    /* Style global */
     body {
-      margin: 0;
-      height: 100vh;
-      background-color: #000;
-      color: white;
-      font-family: sans-serif;
+      margin: 0; padding: 0;
+      font-family: Arial, sans-serif;
+      /* Fond dégradé festif */
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      overflow: hidden; /* éviter les barres de défilement */
+      text-align: center;
+    }
+    h1 { margin: 0.5em 0; }
+
+    /* Conteneur du formulaire (plein écran, centré) */
+    .container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      z-index: 3; /* Au-dessus des animations */
+    }
+    /* Formulaire et éléments */
+    form {
+      display: flex;
+      gap: 0.5em;
+    }
+    input, button {
+      padding: 0.8em 1em;
+      font-size: 1.1em;
+      border: 2px solid rgba(255,255,255,0.8);
+      border-radius: 5px;
+      outline: none;
+      color: #333;
+    }
+    input {
+      background: #fff;
+      /* largeur adaptée */
+      width: 200px;
+      max-width: 80vw;
+    }
+    button {
+      background: #ffe66d;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ffea76;
     }
 
+    /* Message de félicitations (caché par défaut) */
     #message {
       display: none;
-      text-align: center;
-      font-size: 2em;
-      margin-top: 20px;
+      position: fixed;
+      top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
+      padding: 1em;
+      background: rgba(0,0,0,0.5);
+      border-radius: 10px;
+      z-index: 4;
     }
 
+    /* Conteneur pour ballons (plein écran, absolu) */
+    .balloons {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; /* clics traversent */
+      overflow: hidden;
+      z-index: 2;
+    }
+    /* Style de chaque ballon */
     .balloon {
       position: absolute;
-      bottom: -100px;
-      width: 60px;
-      height: 80px;
-      background-color: red;
-      border-radius: 50% 50% 50% 50%;
-      animation: floatUp 5s linear infinite;
+      bottom: -80px; /* commence hors de l'écran */
+      /* Position horizontale aléatoire via variable CSS */
+      left: var(--left, 50%);
+      width: 40px; height: 60px;
+      background: red; /* couleur surchargée en ligne */
+      /* Forme de ballon (coins supérieurs arrondis plus grands que coins inférieurs) */
+      border-radius: 30px 30px 10px 10px;
+      opacity: 0;
+      /* Animation de montée */
+      animation: floatUp 8s ease-out forwards;
+      animation-delay: var(--delay, 0s);
+      animation-play-state: paused; /* lancer manuellement */
+    }
+    /* Fils des ballons (extension verticale blanche) */
+    .balloon::after {
+      content: "";
+      position: absolute;
+      top: 60px; left: 19px;
+      width: 2px; height: 30px;
+      background: #eee;
+    }
+    /* Quand la classe "show" est appliquée, on lance l'animation */
+    .balloons.show .balloon {
+      animation-play-state: running;
+    }
+    /* Définition de l'animation floatUp */
+    @keyframes floatUp {
+      0%   { transform: translateY(0); opacity: 0; }
+      10%  { opacity: 1; }
+      100% { transform: translateY(-110vh); opacity: 1; }
     }
 
-    @keyframes floatUp {
-      0% { bottom: -100px; opacity: 1; }
-      100% { bottom: 110%; opacity: 0; }
+    /* Conteneur pour feux d'artifice (plein écran) */
+    .fireworks {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <input type="text" id="code" placeholder="Tape ton code ici..." />
-  <button onclick="checkCode()">Valider</button>
 
-  <div id="message">🎈 rby ynj7k aziz 5ouk 🎈</div>
+  <!-- Formulaire de saisie du code -->
+  <div class="container">
+    <h1>Entrez le code secret ✨</h1>
+    <form id="codeForm">
+      <input type="password" id="codeInput" placeholder="Code secret">
+      <button type="submit">Valider</button>
+    </form>
+  </div>
+
+  <!-- Conteneur des ballons (vide, les ballons sont ajoutés ci-dessous) -->
+  <div class="balloons">
+    <!-- 8 ballons de différentes couleurs et positions -->
+    <div class="balloon" style="--left:10%;  --delay: 0.2s; background: #ff4d4d;"></div>
+    <div class="balloon" style="--left:25%;  --delay: 0.8s; background: #4dff4d;"></div>
+    <div class="balloon" style="--left:40%;  --delay: 1.5s; background: #4d4dff;"></div>
+    <div class="balloon" style="--left:55%;  --delay: 0.4s; background: #ffff4d;"></div>
+    <div class="balloon" style="--left:70%;  --delay: 1.0s; background: #ff4dff;"></div>
+    <div class="balloon" style="--left:85%;  --delay: 1.2s; background: #4dffff;"></div>
+    <div class="balloon" style="--left:30%;  --delay: 2.0s; background: #ffa64d;"></div>
+    <div class="balloon" style="--left:60%;  --delay: 2.5s; background: #a64dff;"></div>
+  </div>
+
+  <!-- Conteneur des feux d'artifice -->
+  <div class="fireworks"></div>
+
+  <!-- Message caché, qui sera affiché quand le code est correct -->
+  <div id="message">
+    <strong>Wish u all the best aziz 5ouk w inchallah 5ouye 9adha w yjibha</strong>
+  </div>
+
+  <!-- Bibliothèques JavaScript pour confettis et feux d'artifice -->
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
 
   <script>
-    function checkCode() {
-      const input = document.getElementById("code").value;
-      if (input.toLowerCase() === "9rb") {
-        document.getElementById("message").style.display = "block";
-        spawnBalloons();
-      } else {
-        alert("Code incorrect !");
-      }
-    }
+    // Sélection des éléments
+    const form = document.getElementById('codeForm');
+    const input = document.getElementById('codeInput');
+    const messageEl = document.getElementById('message');
+    const balloonsContainer = document.querySelector('.balloons');
+    const fireworksContainer = document.querySelector('.fireworks');
 
-    function spawnBalloons() {
-      for (let i = 0; i < 30; i++) {
-        const balloon = document.createElement("div");
-        balloon.className = "balloon";
-        balloon.style.left = Math.random() * 100 + "vw";
-        balloon.style.backgroundColor = ["red", "blue", "yellow"][i % 3];
-        document.body.appendChild(balloon);
+    // Initialiser les bibliothèques
+    // Pour les confettis, on crée un canvas personnalisé afin de pouvoir positionner le <h1> au-dessus
+    const confettiCanvas = document.createElement('canvas');
+    confettiCanvas.style.position = 'fixed';
+    confettiCanvas.style.top = '0';
+    confettiCanvas.style.left = '0';
+    confettiCanvas.style.width = '100%';
+    confettiCanvas.style.height = '100%';
+    confettiCanvas.style.zIndex = '1';
+    confettiCanvas.setAttribute('id', 'confetti-canvas');
+    document.body.appendChild(confettiCanvas);
+    const jsConfetti = new JSConfetti({ canvas: confettiCanvas });
+
+    // Préparer les feux d'artifice (à l'écran)
+    const fireworks = new Fireworks.default(fireworksContainer);
+
+    // Gestion de la soumission du formulaire
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const code = input.value.trim();
+      if (code === 'bac2k25') {
+        // Code correct : afficher le message et déclencher les animations
+        form.reset();
+        document.querySelector('.container').style.display = 'none'; // cacher l'input
+        messageEl.style.display = 'block'; // afficher le message
+        balloonsContainer.classList.add('show'); // démarrer animation ballons
+        fireworks.start(); // lancer les feux d'artifice
+
+        // Lancer plusieurs vagues de confettis
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            jsConfetti.addConfetti({
+              confettiNumber: 100,
+              confettiColors: ['#ffcc00','#ff66cc','#66ff66','#6699ff','#ff9966']
+            });
+          }, i * 800);
+        }
+        // Arrêter les feux après un certain temps
+        setTimeout(() => fireworks.stop(), 10000);
+
+      } else {
+        // Code incorrect : on peut ajouter un effet (ex: secouer l'input) ou message d'erreur simple
+        input.style.borderColor = '#ff3333';
+        setTimeout(() => input.style.borderColor = 'rgba(255,255,255,0.8)', 500);
       }
-    }
+    });
   </script>
 </body>
 </html>
